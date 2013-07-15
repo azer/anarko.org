@@ -1,0 +1,26 @@
+{
+  "name": "play-bandista",
+  "version": "0.0.0",
+  "description": "A web app to play Bandista songs",
+  "main": "index.js",
+  "keywords": [
+    "bandista",
+    "music"
+  ],
+  "repository": {
+    "url": "git@github.com:azer/play-bandista.git",
+    "type": "git"
+  },
+  "author": "Azer Koçulu <azer@kodfabrik.com>",
+  "license": "BSD",
+  "dependencies": {
+    "indev": "0.0.9",
+    "one": "~3.1.1",
+    "stylus": "~0.34.1",
+    "jsify": "0.0.1",
+    "attr": "0.0.1",
+    "domquery": "0.0.x",
+    "new-format": "0.0.1",
+    "attrs": "0.0.0"
+  }
+}
