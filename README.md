@@ -1,16 +1,20 @@
 ## bandista-player
 
-A web app to play Bandista songs
+A web app to play Bandista songs. Check it out at [anarko.org](http://anarko.org)
 
 ## Install
 
 ```bash
-$ npm install play-bandista
+$ git clone https://github.com/azer/bandista-player.git
+$ cd 7min.io
+$ npm install
 ```
 
-## Usage
+And:
 
- ```js
+```bash
+$ npm install -g indev
+$ indev # will be outputting the dist/ directory, and watching for changes to update it. 
 ```
 
-![](https://dl.dropbox.com/s/9q2p5mrqnajys22/npmel.jpg)
+![](http://tayfabandista.org/i/bandista.gif)
