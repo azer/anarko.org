@@ -6,7 +6,7 @@ all 'lib/templates.js', 'dist/index.html', 'dist/player.js', 'dist/player.css'
 
 target 'dist/index.html', 'index.html', ->
     debug 'Building dist/player.js'
-    exec 'cp index.html dist/index.html'
+    cp 'index.html', 'dist/index.html'
 
 target 'dist/player.js', '*.js', 'lib/*.js', 'node_modules', 'components', ->
     debug 'Building dist/player.js'
