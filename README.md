@@ -1,4 +1,4 @@
-## bandista-player
+## anarko.org
 
 A web app to play Bandista songs. Check it out at [anarko.org](http://anarko.org)
 
