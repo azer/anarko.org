@@ -6,7 +6,7 @@ A web app to play Bandista songs. Check it out at [anarko.org](http://anarko.org
 
 ```bash
 $ git clone https://github.com/azer/bandista-player.git
-$ cd 7min.io
+$ cd bandista-player
 $ npm install
 ```
 
