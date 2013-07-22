@@ -63,6 +63,7 @@ body {
   color: #fff;
   font: 22px 'Times New Roman', 'Times', serif;
   cursor: pointer;
+  padding-bottom: 50px;
 }
 .song {
   margin-bottom: 10px;

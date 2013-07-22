@@ -24,10 +24,10 @@ function setup(){
     .on(':enter', pause);
 }
  },{"./current":2,"./header":6,"./playlist":10,"./pause":35,"domquery":14}],36:[function(require,module,exports){ var dom      = require('domquery'),
-    render   = require('./render'),
+    audio    = require('play-audio'),
     current  = require('./current'),
     playlist = require('./playlist'),
-    view;
+    playing;
 
 module.exports = {
   setup: setup
@@ -39,36 +39,29 @@ function onSongChange(start, stop){
   if(start){
     current.pause(false);
     start.view.addClass('selected');
-    view.attr('src', start.url());
+    console.log('#', start.url());
+    playing.src(start.url());
   }
 }
 
 function onPause(pause){
   if(pause){
-    view[0].pause();
+    playing.pause();
     return;
   }
 
-  view[0].play();
+  playing.play();
 }
 
 function setup(){
   current.playing.subscribe(onSongChange);
   current.pause.subscribe(onPause);
 
-  view = dom(render('player.html'))
-    .on('ended', playlist.next)
-    .insert('.container');
+  window.playing = playing;
+  playing = audio().autoplay().on('ended', playlist.next);
+  console.log(playing.src());
 }
- },{"./render":7,"./current":2,"./playlist":10,"domquery":14}],7:[function(require,module,exports){ var format    = require('new-format'),
-    templates = require('./templates');
-
-module.exports = render;
-
-function render(template, vars){
-  return format(templates[template], vars);
-}
- },{"./templates":8,"new-format":9}],2:[function(require,module,exports){ var attr = require("attr");
+ },{"./current":2,"./playlist":10,"domquery":14,"play-audio":37}],2:[function(require,module,exports){ var attr = require("attr");
 
 module.exports = {
   index   : attr(0),
@@ -101,10 +94,12 @@ function prev(){
 function setup(){
   dom('.container').add(render('playlist.html'));
 
-  var album, title, song, ind;
-  for ( album in content ) {
-    for ( title in content[album] ) {
-      songs.push(song = newSong(content[album][title], title)) - 1;
+  var artist, album, title, song, ind;
+  for(artist in content){
+    for ( album in content[artist] ) {
+      for ( title in content[artist][album] ) {
+        songs.push(song = newSong(content[artist][album][title], title)) - 1;
+      }
     }
   }
 
@@ -116,48 +111,58 @@ function setup(){
   }
 }
  },{"./current":2,"../content":11,"./render":7,"./song":12,"domquery":14,"shuffle-array":34}],11:[function(require,module,exports){ module.exports = {
-  "de te fabula narratur": {
-    "haydi barikata": "http://tayfabandista.org/player/haydi_barikata.mp3",
-    "ozgurluge manus": "http://tayfabandista.org/player/ozgurluge_manus.mp3",
-    "ille de rumba": "http://tayfabandista.org/player/ille_de_rumba.mp3",
-    "her seyin sarkisi": "http://tayfabandista.org/player/her_seyin_sarkisi.mp3",
-    "maya": "http://tayfabandista.org/player/maya.mp3",
-    "aim": "http://tayfabandista.org/player/aim.mp3",
-    "kara cocuk raksi intro": "http://tayfabandista.org/player/kara_cocuk_raksi_intro.mp3",
-    "kara cocuk raksi": "http://tayfabandista.org/player/kara_cocuk_raksi.mp3",
-    "hicbir seyin sarkisi": "http://tayfabandista.org/player/hicbir_seyin_sarkisi.mp3"
-  },
-  "pasanin basucu sarkilari":{
-    "benim annem cumartesi": "http://tayfabandista.org/pasanin_basucu_sarkilari/player/benim_annem_cumartesi.mp3",
-    "pardon afedersiniz ft. Sultan Tunc": "http://tayfabandista.org/pasanin_basucu_sarkilari/player/pardon_afedersiniz_mr_genelkurmay.mp3",
-    "yan babilon": "http://tayfabandista.org/pasanin_basucu_sarkilari/player/yan_babilon.mp3"
-  },
-  "su anda! simdi!": {
-    "birinci rollama": "http://tayfabandista.org/su_anda_simdi/birinci_rollama.mp3",
-    "kizil flama": "http://tayfabandista.org/su_anda_simdi/kizil_flama.mp3"
-  },
-  "dikkat askersiz bolge": {
-    "gavur imam isyani": "http://tayfabandista.org/dikkat_askersiz_bolge/player/gavur_imam_isyani.mp3",
-    "hicbir yerin sarkisi": "http://tayfabandista.org/dikkat_askersiz_bolge/player/hicbir_yerin_sarkisi.mp3",
-    "beton millet sakarya": "http://tayfabandista.org/dikkat_askersiz_bolge/player/beton_millet_sakarya.mp3"
-  },
-  "daima! // siempre!": {
-    "inkarin sarkisi": "http://tayfabandista.org/daima/player/inkarin_sarkisi.mp3",
-    "hoscakal": "http://tayfabandista.org/daima/player/hoscakal.mp3",
-    "mesele / a": "http://tayfabandista.org/daima/player/mesele-a.mp3",
-    "ask sarkisi": "http://tayfabandista.org/daima/player/ask_sarkisi.mp3",
-    "selam size": "http://tayfabandista.org/daima/player/selam_size.mp3",
-    "kara kizil ve sair (feat. Enzo Ikah)": "http://tayfabandista.org/daima/player/kara,_kizil_ve_sair.mp3",
-    "rasta semahi": "http://tayfabandista.org/daima/player/rasta_semahi.mp3",
-    "her yerin sarkisi": "http://tayfabandista.org/daima/player/her_yerin_sarkisi.mp3"
-  },
-  "sınırsız-ulussuz-sürgünsüz // no border-no nation-no exile": {
-    "haymatlos": "http://tayfabandista.org/sinirsiz-ulussuz-surgunsuz/mp3/haymatlos.mp3",
-    "hic kimsenin sarkisi": "http://tayfabandista.org/sinirsiz-ulussuz-surgunsuz/mp3/hickimseninsarkisi.mp3",
-    "kim yerli kim gocmen": "http://tayfabandista.org/sinirsiz-ulussuz-surgunsuz/mp3/kimyerlikimgocmen.mp3"
+  "bandista": {
+    "de te fabula narratur": {
+      "haydi barikata": "http://tayfabandista.org/player/haydi_barikata.mp3",
+      "ozgurluge manus": "http://tayfabandista.org/player/ozgurluge_manus.mp3",
+      "ille de rumba": "http://tayfabandista.org/player/ille_de_rumba.mp3",
+      "her seyin sarkisi": "http://tayfabandista.org/player/her_seyin_sarkisi.mp3",
+      "maya": "http://tayfabandista.org/player/maya.mp3",
+      "aim": "http://tayfabandista.org/player/aim.mp3",
+      "kara cocuk raksi intro": "http://tayfabandista.org/player/kara_cocuk_raksi_intro.mp3",
+      "kara cocuk raksi": "http://tayfabandista.org/player/kara_cocuk_raksi.mp3",
+      "hicbir seyin sarkisi": "http://tayfabandista.org/player/hicbir_seyin_sarkisi.mp3"
+    },
+    "pasanin basucu sarkilari":{
+      "benim annem cumartesi": "http://tayfabandista.org/pasanin_basucu_sarkilari/player/benim_annem_cumartesi.mp3",
+      "pardon afedersiniz ft. Sultan Tunc": "http://tayfabandista.org/pasanin_basucu_sarkilari/player/pardon_afedersiniz_mr_genelkurmay.mp3",
+      "yan babilon": "http://tayfabandista.org/pasanin_basucu_sarkilari/player/yan_babilon.mp3"
+    },
+    "su anda! simdi!": {
+      "birinci rollama": "http://tayfabandista.org/su_anda_simdi/birinci_rollama.mp3",
+      "kizil flama": "http://tayfabandista.org/su_anda_simdi/kizil_flama.mp3"
+    },
+    "dikkat askersiz bolge": {
+      "gavur imam isyani": "http://tayfabandista.org/dikkat_askersiz_bolge/player/gavur_imam_isyani.mp3",
+      "hicbir yerin sarkisi": "http://tayfabandista.org/dikkat_askersiz_bolge/player/hicbir_yerin_sarkisi.mp3",
+      "beton millet sakarya": "http://tayfabandista.org/dikkat_askersiz_bolge/player/beton_millet_sakarya.mp3"
+    },
+    "daima! // siempre!": {
+      "inkarin sarkisi": "http://tayfabandista.org/daima/player/inkarin_sarkisi.mp3",
+      "hoscakal": "http://tayfabandista.org/daima/player/hoscakal.mp3",
+      "mesele / a": "http://tayfabandista.org/daima/player/mesele-a.mp3",
+      "ask sarkisi": "http://tayfabandista.org/daima/player/ask_sarkisi.mp3",
+      "selam size": "http://tayfabandista.org/daima/player/selam_size.mp3",
+      "kara kizil ve sair (feat. Enzo Ikah)": "http://tayfabandista.org/daima/player/kara,_kizil_ve_sair.mp3",
+      "rasta semahi": "http://tayfabandista.org/daima/player/rasta_semahi.mp3",
+      "her yerin sarkisi": "http://tayfabandista.org/daima/player/her_yerin_sarkisi.mp3"
+    },
+    "sınırsız-ulussuz-sürgünsüz // no border-no nation-no exile": {
+      "haymatlos": "http://tayfabandista.org/sinirsiz-ulussuz-surgunsuz/mp3/haymatlos.mp3",
+      "hic kimsenin sarkisi": "http://tayfabandista.org/sinirsiz-ulussuz-surgunsuz/mp3/hickimseninsarkisi.mp3",
+      "kim yerli kim gocmen": "http://tayfabandista.org/sinirsiz-ulussuz-surgunsuz/mp3/kimyerlikimgocmen.mp3"
+    }
   }
 };
- },{}],12:[function(require,module,exports){ var attrs   = require('attrs'),
+ },{}],7:[function(require,module,exports){ var format    = require('new-format'),
+    templates = require('./templates');
+
+module.exports = render;
+
+function render(template, vars){
+  return format(templates[template], vars);
+}
+ },{"./templates":8,"new-format":9}],12:[function(require,module,exports){ var attrs   = require('attrs'),
     dom     = require("domquery"),
     current = require('./current'),
     render  = require('./render');
@@ -184,8 +189,7 @@ function newSong(url, title){
 
   return song;
 }
- },{"./current":2,"./render":7,"attrs":13,"domquery":14}],8:[function(require,module,exports){ exports["header.html"] = "<div class=\"header\"> <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 512 512\" enable-background=\"new 0 0 512 512\" xml:space=\"preserve\"> <path class=\"play\" d=\"M256,52.481c-113.771,0-206,91.117-206,203.518c0,112.398,92.229,203.52,206,203.52 c113.772,0,206-91.121,206-203.52C462,143.599,369.772,52.481,256,52.481z M197.604,368.124V148.872l178.799,109.627 L197.604,368.124z\"> </path> <path class=\"pause\" d=\"M256,52.481c-113.771,0-206,91.117-206,203.518c0,112.398,92.229,203.52,206,203.52 c113.772,0,206-91.121,206-203.52C462,143.599,369.772,52.481,256,52.481z M238.397,356h-58.253V156h58.253V356z M333.854,356 h-58.252V156h58.252V356z\"> </path> </svg> <h1>Bandista</h1> </div>"
-exports["player.html"] = "<audio preload=\"auto\" autoplay></audio>"
+ },{"./current":2,"./render":7,"attrs":13,"domquery":14}],8:[function(require,module,exports){ exports["header.html"] = "<div class=\"header\"> <svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\" viewBox=\"0 0 512 512\" enable-background=\"new 0 0 512 512\" xml:space=\"preserve\"> <path class=\"play\" d=\"M256,52.481c-113.771,0-206,91.117-206,203.518c0,112.398,92.229,203.52,206,203.52 c113.772,0,206-91.121,206-203.52C462,143.599,369.772,52.481,256,52.481z M197.604,368.124V148.872l178.799,109.627 L197.604,368.124z\"> </path> <path class=\"pause\" d=\"M256,52.481c-113.771,0-206,91.117-206,203.518c0,112.398,92.229,203.52,206,203.52 c113.772,0,206-91.121,206-203.52C462,143.599,369.772,52.481,256,52.481z M238.397,356h-58.253V156h58.253V356z M333.854,356 h-58.252V156h58.252V356z\"> </path> </svg> </div>"
 exports["playlist.html"] = "<ul class=\"playlist\"> </ul>"
 exports["song.html"] = "<li class=\"song\"><span>{title}</span></li>" },{}],6:[function(require,module,exports){ var dom      = require('domquery'),
     current  = require('./current'),
@@ -1061,4 +1065,136 @@ module.pick = function (arr, picks) {
 
     return arr[Math.floor(Math.random() * arr.length)];
 }; },{}],13:[function(require,module,exports){ module.exports = require('attr').attrs;
- },{"attr":3}] }; function require(o){ if(o[2]) return o[2].exports; o[0](function(u){ if(!require.m[o[1][u]]) { throw new Error('Cannot find module "' + u + '"'); } return require(require.m[o[1][u]]); }, o[2] = { exports: {} }, o[2].exports); return o[2].exports; };  return require(require.m[0]); }({ env:{} }));
+ },{"attr":3}],37:[function(require,module,exports){ module.exports = require('./lib/player');
+ },{"./lib/player":38}],38:[function(require,module,exports){ var newChain  = require('new-chain'),
+    src = require('./src'),
+    render = require('./render');
+
+module.exports = play;
+
+function play(urls, dom){
+  var el, chain, url;
+
+  dom || ( dom = document.documentElement );
+  el = render();
+  dom.appendChild(el);
+
+  chain = newChain({
+    autoplay: bool('autoplay'),
+    controls: bool('controls'),
+    load: method('load'),
+    loop: bool('loop'),
+    muted: bool('muted'),
+    on: on,
+    pause: method('pause'),
+    play: method('play'),
+    preload: bool('preload')
+  });
+
+  chain.currentTime = attr('currentTime');
+  chain.element = element;
+  chain.src = src.attr(el);
+  chain.volume = attr('volume');
+  chain.remove = remove;
+
+  chain.src(urls);
+
+  return chain;
+
+  function attr(name){
+    return function(value){
+      if ( arguments.length ) {
+        el[name] = value;
+        return chain;
+      }
+
+      return el[name];
+    };
+  }
+
+  function bool(name){
+    return function(value){
+      if (value === false) {
+        return el[name] = false;
+      }
+
+      return el[name] = true;
+    };
+  }
+
+  function element(){
+    return el;
+  }
+
+  function on(event, callback){
+    el.addEventListener(event, callback, false);
+  }
+
+  function method(name){
+    return function(){
+      return el[name].apply(el, arguments);
+    };
+  }
+
+  function remove(){
+    return el.parentNode.removeChild(el);
+  }
+
+}
+ },{"./src":39,"./render":41,"new-chain":32}],39:[function(require,module,exports){ var mimeOf = require("./mime");
+
+module.exports = {
+  attr: attr,
+  pick: pick
+};
+
+function attr(el){
+  var value;
+
+  return function(urls){
+    if (arguments.length) {
+      value = urls;
+      el.setAttribute('src', pick(el, value));
+    }
+
+    return value;
+  };
+}
+
+function pick(el, urls){
+  if(!urls) return;
+
+  if(typeof urls == 'string'){
+    return urls;
+  }
+
+  return urls.filter(function(url){
+    return !!el.canPlayType(mimeOf(url));
+  })[0];
+}
+ },{"./mime":40}],41:[function(require,module,exports){ var domify = require('domify'),
+    templates = require("./templates");
+
+module.exports = render;
+
+function render(src){
+  return domify(templates['audio.html']);
+}
+ },{"./templates":42,"domify":21}],42:[function(require,module,exports){ exports["audio.html"] = "<audio preload=\"auto\" /></audio>" },{}],40:[function(require,module,exports){ var table = {
+  aif  : "audio/x-aiff",
+  aiff : "audio/x-aiff",
+  wav  : "audio/x-wav",
+  mp3  : 'audio/mpeg',
+  m3u  : "audio/x-mpegurl",
+  mid  : "audio/midi",
+  midi : "audio/midi",
+  m4a  : 'audio/m4a',
+  ogg  : 'audio/ogg'
+};
+
+module.exports = mimeOf;
+
+function mimeOf(url){
+  return table[ url.split('.').slice(-1)[0] ];
+}
+ },{}] }; function require(o){ if(o[2]) return o[2].exports; o[0](function(u){ if(!require.m[o[1][u]]) { throw new Error('Cannot find module "' + u + '"'); } return require(require.m[o[1][u]]); }, o[2] = { exports: {} }, o[2].exports); return o[2].exports; };  return require(require.m[0]); }({ env:{} }));

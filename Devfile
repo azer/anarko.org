@@ -1,6 +1,6 @@
-onejs = './node_modules/one/bin/onejs'
-stylus = './node_modules/stylus/bin/stylus'
-jsify = './node_modules/jsify/bin/jsify'
+onejs = bin 'one/onejs'
+stylus = bin 'stylus'
+jsify = bin 'jsify'
 
 all 'lib/templates.js', 'dist/index.html', 'dist/player.js', 'dist/player.css'
 
@@ -10,15 +10,15 @@ target 'dist/index.html', 'index.html', ->
 
 target 'dist/player.js', '*.js', 'lib/*.js', 'node_modules', 'components', ->
     debug 'Building dist/player.js'
-    exec "#{onejs} index.js -o dist/player.js"
+    onejs "index.js", "-o", "dist/player.js"
 
 target 'dist/player.css', 'player.styl', ->
     debug 'Building dist/player.css'
-    exec "#{stylus} player.styl -o dist/"
+    stylus "player.styl -o dist/"
 
 target 'lib/templates.js', 'templates', ->
-    exec "#{jsify} templates/* -o lib/templates.js"
+    jsify "templates/* -o lib/templates.js"
 
 task 'deploy', ->
-    mkdir '-p', '../berraksular.com/bandista'
-    cp '-rf', 'dist/*', '../berraksular.com/bandista/.'
+    mkdir '-p', 'prod'
+    cp '-rf', 'dist/*', 'prod/.'
